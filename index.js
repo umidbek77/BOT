@@ -28,29 +28,32 @@ async function savePhoneNumber(userId, phoneNumber) {
 }
 
 bot.start((ctx) => {
-  ctx.reply('Salom! Iltimos, "📲 Telefon raqamni yuborish" tugmasini bosing.', {
-    reply_markup: {
-      keyboard: [
-        [{ text: "📲 Telefon raqamni yuborish", request_contact: true }],
-      ],
-      resize_keyboard: true,
-      one_time_keyboard: true,
-    },
-  });
+  ctx.reply(
+    "Salom! Iltimos, '📲 Telefon raqamni yuborish' tugmasini bosing va bu raqam orqali sizning ovoz berganingiz tekshiriladi va siz ovoz berganingizdan so'ng saytdagi ovozlar tarixidan sizning raqamingiz solishtiriladi va tasdiqlansa sizdan karta yuborish talab qilinadi undan so'ng admin tomonidan hisobingizga pul tushirilib beriladi.",
+    {
+      reply_markup: {
+        keyboard: [
+          [{ text: "📲 Telefon raqamni yuborish", request_contact: true }],
+        ],
+        resize_keyboard: true,
+        one_time_keyboard: true,
+      },
+    }
+  );
 });
 
 bot.on("contact", async (ctx) => {
   const phoneNumber = ctx.message.contact.phone_number;
   const userId = ctx.message.from.id;
   await savePhoneNumber(userId, phoneNumber);
-  ctx.reply("✅ Raqamingiz saqlandi. Endi ovoz bering:");
+  ctx.reply("Raqamingiz solishtirish uchun yuborildi. Endi ovoz bering:✅");
   ctx.reply(
     "🔗 https://openbudget.uz/boards/initiatives/initiative/50/1fe0a54f-b7a5-49d3-bf2d-4b9bf77662c2"
   );
-  ctx.reply("✅ Ovoz berganingizdan so‘ng, pastdagi tugmani bosing:", {
+  ctx.reply("Ovoz berganingizdan so‘ng, pastdagi tugmani bosing:✅", {
     reply_markup: {
       inline_keyboard: [
-        [{ text: "✅ Tasdiqlash", callback_data: "confirm_vote" }],
+        [{ text: "Tasdiqlash:✅", callback_data: "confirm_vote" }],
       ],
     },
   });
@@ -79,13 +82,13 @@ bot.action("confirm_vote", async (ctx) => {
         valueInputOption: "RAW",
         requestBody: { values: [["Tasdiqlangan"]] },
       });
-      ctx.reply("✅ Ovoz berish tasdiqlandi!");
+      ctx.reply("Ovoz berish tasdiqlandi!✅");
     } else {
-      ctx.reply("❌ Ma‘lumot topilmadi. Telefon raqamingizni qayta yuboring.");
+      ctx.reply("Ma‘lumot topilmadi.❌ Telefon raqamingizni qayta yuboring.");
     }
   } catch (error) {
     console.error(error);
-    ctx.reply("❌ Xatolik yuz berdi. Qayta urinib ko‘ring.");
+    ctx.reply("Xatolik yuz berdi.❌ Qayta urinib ko‘ring.");
   }
 });
 
